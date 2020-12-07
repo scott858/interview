@@ -165,6 +165,16 @@ def check_block(brow_ix, bcol_ix):
     return check_ok
 
 
+def permute_2(lst, l, r):
+    if l < r:
+        for i in range(l, r + 1):
+            lst[l], lst[i], = lst[i], lst[l]
+            permute_2(lst, l + 1, r)
+            lst[l], lst[i], = lst[i], lst[l]
+    else:
+        print(lst)
+
+
 def solve(pa):
     global puzzle
     if len(pa) > 0:
@@ -188,11 +198,13 @@ def solve(pa):
 
 if __name__ == '__main__':
     pa = get_puzzle_availability()
+    lst = [1, 2, 3]
+    permute_2(lst, 0, len(lst) - 1)
 
-    print(pa)
-
-    print(solve(pa))
-    print_puzzle(puzzle)
+    # print(pa)
+    #
+    # print(solve(pa))
+    # print_puzzle(puzzle)
 
     # print(check_block(0, 0))
 
