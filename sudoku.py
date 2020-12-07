@@ -70,6 +70,12 @@ def set_block_element(brow_ix, bcol_ix, block_ix, val):
     return ''.join(temp_puzzle)
 
 
+def zero_block(brow_ix, bcol_ix):
+    global puzzle
+    for i in range(9):
+        puzzle = set_block_element(brow_ix, bcol_ix, i, '0')
+
+
 def get_block(brow_ix, bcol_ix):
     block = []
 
@@ -117,7 +123,13 @@ def get_puzzle_availability():
     for i in range(3):
         for j in range(3):
             # put i,j in blocks
-            blocks.append(get_block_availability(get_block(i, j)))
+            block_ix = [[i, j]]
+            avail = get_block_availability(get_block(i, j))
+            block_ix.append(avail[0])
+
+            perm = permute(avail[1])
+            block_ix.append([list(x) for x in perm])
+            blocks.append(block_ix)
     return blocks
 
 
@@ -141,23 +153,49 @@ def next_step_ok(brow_ix, bcol_ix, ix):
     return check_row(row_ix) and check_col(col_ix)
 
 
+def check_block(brow_ix, bcol_ix):
+    base_row_ix = brow_ix * 3
+    base_col_ix = bcol_ix * 3
+    check_ok = True
+    for i in range(3):
+        check_ok = check_ok and check_row(base_row_ix + i)
+        check_ok = check_ok and check_col(base_col_ix + i)
+        if check_ok is False:
+            break
+    return check_ok
+
+
 def solve(pa):
     global puzzle
     if len(pa) > 0:
-        for block_count, (ixs, vals) in enumerate(pa):
-            brow_ix = int(block_count / 3)
-            bcol_ix = block_count - brow_ix * 3
-            for ix in ixs:
-                for val in vals:
-                    puzzle = set_block_element(brow_ix, bcol_ix, ix, val)
-                    if next_step_ok(brow_ix, bcol_ix, ix):
-                        solve(pa[1:])
+        (brow_ix, bcol_ix), ixs, vals = pa[0]
+        for arr in vals:
+            perm = zip(ixs, arr)
+            for val in perm:
+                puzzle = set_block_element(brow_ix, bcol_ix, val[0], val[1])
+            print_puzzle(puzzle)
+            if check_block(brow_ix, bcol_ix):
+                if solve(pa[1:]):
+                    return True
+
+        for ix in ixs:
+            puzzle = set_block_element(brow_ix, bcol_ix, ix, '0')
+        print_puzzle(puzzle)
+        return False
+
+    return True
 
 
 if __name__ == '__main__':
     pa = get_puzzle_availability()
-    solve(pa)
+
+    print(pa)
+
+    print(solve(pa))
     print_puzzle(puzzle)
+
+    # print(check_block(0, 0))
+
     # set_element(1, 1, '5')
     # print_puzzle(puzzle)
     # print(check_row(0))
