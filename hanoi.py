@@ -1,6 +1,6 @@
 from collections import deque
 
-TOWER_HEIGHT = 3
+TOWER_HEIGHT = 5
 NUM_RODS = 3
 
 rods = []
@@ -9,47 +9,52 @@ for i in range(NUM_RODS):
     rod.append(TOWER_HEIGHT + 1)
     rods.append(rod)
 
-for i in range(3, 0, -1):
+for i in range(TOWER_HEIGHT, 0, -1):
     rods[0].append(i)
 
-for rod in rods:
-    print(rod)
+
+def transfer(rod_1, rod_2):
+    l_1 = len(rod_1)
+    l_2 = len(rod_2)
+
+    if l_1 > 1 and l_2 > 1:
+        if rod_2[-1] < rod_1[-1]:
+            rod_1.append(rod_2.pop())
+        else:
+            rod_2.append(rod_1.pop())
+    elif l_1 > 1:
+        rod_2.append(rod_1.pop())
+    elif l_2 > 1:
+        rod_1.append(rod_2.pop())
 
 
-def move(rods, to_rod):
-    if len(rods) > 1:
-        while True:
-            for rod_ix, rod in enumerate(rods):
-                if len(rod) > 1:
-                    other_rods = rods[:rod_ix] + rods[rod_ix + 1:]
-                    for other_rod in other_rods:
-                        this_top = rod[-1]
-                        next_top = other_rod[-1]
-                        if this_top < next_top:
-                            other_rod.append(rod.pop())
-
-                    print(rods)
-                    if move(other_rods, to_rod):
-                        return True
-                    else:
-                        # backtrace
-                        pass
-    elif len(rods[0]) == TOWER_HEIGHT + 1:
-        return True
-
-
-def tower_of_hanoi(rods):
-    rod_a = rods[0]
-    if len(rods) == 1:
-        return
-
-    if n % 2 == 0:
-        tower_of_hanoi(n - 1, src, aux, dest)
-        tower_of_hanoi(n - 1, aux, dest, src)
+def move(rods):
+    if len(rods[-1]) == TOWER_HEIGHT + 1:
+        print(rods)
     else:
-        tower_of_hanoi(n - 1, src, aux, dest)
-        tower_of_hanoi(n - 1, aux, dest, src)
+        print(rods)
+        transfer(rods[0], rods[1])
+        print(rods)
+        transfer(rods[0], rods[2])
+        print(rods)
+        transfer(rods[1], rods[2])
+        move(rods)
+
+
+def move_2(n, src, target, aux):
+    if n > 0:
+        move_2(n - 1, src, aux, target)
+
+        target.append(src.pop())
+
+        move_2(n - 1, aux, target, src)
 
 
 if __name__ == '__main__':
-    tower_of_hanoi(4, 'A', 'C', 'B')
+    # move(rods)
+    src = [1, 2, 3]
+    target = []
+    aux = []
+    print('{0} {1} {2}'.format(src, aux, target))
+    move_2(len(src), src, target, aux)
+    print('{0} {1} {2}'.format(src, aux, target))
