@@ -1,4 +1,4 @@
-NUM_QUEENS = 4
+NUM_QUEENS = 7
 board = ''.join(NUM_QUEENS ** 2 * ['0'])
 
 
@@ -101,10 +101,10 @@ def solve(queens):
     else:
         str_board = ''.join(board)
         if str_board not in sol_boards:
+            print_board(str_board)
             sol_boards.add(str_board)
 
 
 if __name__ == '__main__':
     solve(NUM_QUEENS)
-    for sol in sol_boards:
-        print_board(sol)
+    print(len(sol_boards))
