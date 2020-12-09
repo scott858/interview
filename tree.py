@@ -1,3 +1,6 @@
+import queue
+
+
 class Node:
     def __init__(self, data=None):
         self.data = data
@@ -16,7 +19,7 @@ class Node:
                     self.right = Node(data)
                 else:
                     self.right.add_node(data)
-                
+
         else:
             self.data = data
 
@@ -39,7 +42,7 @@ class Node:
             visited += self.in_order_traversal(root.right)
 
         return visited
-        
+
     def pre_order_traversal(self, root):
         visited = []
 
@@ -59,20 +62,43 @@ class Node:
             visited.append(root.data)
 
         return visited
-        
+
+    def bfs(self):
+        q = queue.Queue()
+        q.put(self)
+        while not q.empty():
+            node = q.get()
+            print(node.data)
+            if node.left is not None:
+                q.put(node.left)
+            if node.right is not None:
+                q.put(node.right)
+
 
 if __name__ == '__main__':
     root = Node(27)
+
+    # l1
     root.add_node(14)
+    # r1
     root.add_node(35)
+
+    # l1-l2
     root.add_node(10)
+    # l1-r2
     root.add_node(19)
+
+    # r1-l2
     root.add_node(31)
+    # r1-r2
     root.add_node(42)
-    root.print_tree()
-    #trav = root.in_order_traversal(root)
-    #print(trav)
-    #trav = root.pre_order_traversal(root)
-    #print(trav)
-    #trav = root.post_order_traversal(root)
-    #print(trav)
+
+    # root.print_tree()
+    root.bfs()
+
+    # trav = root.in_order_traversal(root)
+    # print(trav)
+    # trav = root.pre_order_traversal(root)
+    # print(trav)
+    # trav = root.post_order_traversal(root)
+    # print(trav)

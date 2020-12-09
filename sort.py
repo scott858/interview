@@ -1,13 +1,11 @@
-
-
 def bubble_sort(data):
     dlen = len(data)
 
     for i in range(dlen - 1, 0, -1):
         for j in range(i):
             # compare elements pairwise and promote winner to higher position
-            if data[j] > data[j+1]:
-                data[j+1], data[j] = data[j], data[j+1]
+            if data[j] > data[j + 1]:
+                data[j + 1], data[j] = data[j], data[j + 1]
 
 
 def partition(data, l_ix, r_ix):
@@ -15,16 +13,16 @@ def partition(data, l_ix, r_ix):
     pivot = data[r_ix]
 
     # move smaller values to left at this index
-    fill_ix = l_ix -1
+    fill_ix = l_ix - 1
 
     # fill the left side of the array with elements smaller than the pivot
     for j in range(l_ix, r_ix):
         if data[j] < pivot:
-            fill_ix  += 1
+            fill_ix += 1
             data[fill_ix], data[j] = data[j], data[fill_ix]
 
     # place pivot at the partition boundary
-    data[fill_ix+1], data[r_ix] = data[r_ix], data[fill_ix+1]
+    data[fill_ix + 1], data[r_ix] = data[r_ix], data[fill_ix + 1]
     return fill_ix + 1
 
 
@@ -33,11 +31,11 @@ def quick_sort(data, l_ix, r_ix):
         p_ix = partition(data, l_ix, r_ix)
 
         # recursively sort partitions without pivot element
-        #lower partition
+        # lower partition
         quick_sort(data, l_ix, p_ix - 1)
-        #upper partition
+        # upper partition
         quick_sort(data, p_ix + 1, r_ix)
-    
+
 
 def merge_sort(data):
     data_len = len(data)
@@ -57,10 +55,7 @@ def merge_sort(data):
     return merged
 
 
-
-
 def merge(left, right):
-
     merged = []
 
     while len(left) and len(right):
@@ -93,17 +88,14 @@ def insertion_sort(data):
     return data_out
 
 
-
-
 if __name__ == '__main__':
-    data= [1,50,3,12,8]
+    data = [1, 50, 3, 12, 8]
 
     print(data)
 
-    #bubble_sort(data)
-    #quick_sort(data, 0, len(data)-1)
-    #data = merge_sort(data)
+    # bubble_sort(data)
+    # quick_sort(data, 0, len(data)-1)
+    # data = merge_sort(data)
     data = insertion_sort(data)
 
     print(data)
-
