@@ -11,6 +11,8 @@
 -- radix sort
 -- bucket sort
 -- shell sort
+
+-- shell sort
 """
 
 
@@ -94,7 +96,27 @@ def quick_sort(data):
     return res
 
 
+def selection_sort(data):
+    data_len = len(data)
+
+    for i in range(data_len):
+        small_ix = i
+        for j in range(i, data_len - 1):
+            next_ix = j + 1
+            if data[small_ix] > data[next_ix]:
+                small_ix = next_ix
+
+        data[small_ix], data[i] = data[i], data[small_ix]
+
+
+def min_run(n):
+    r = 0
+    while n >= 32:
+        r |= n & 1
+        n >>= 1
+    return r + n
+
+
 if __name__ == '__main__':
     d = [1, 4, 6, 3, 42, 7, 9, 44, 2]
-    res = quick_sort(d)
-    print(res)
+    print(min_run(63))
