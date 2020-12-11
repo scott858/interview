@@ -1,104 +1,101 @@
-import queue
-
-
 class Node:
     def __init__(self, data=None):
         self.data = data
         self.left = None
         self.right = None
 
-    def add_node(self, data):
-        if self.data:
-            if data <= self.data:
-                if self.left is None:
-                    self.left = Node(data)
-                else:
-                    self.left.add_node(data)
-            else:
-                if self.right is None:
-                    self.right = Node(data)
-                else:
-                    self.right.add_node(data)
-
+    def bst_add(self, data):
+        if self.data is None:
+            root.data = data
         else:
-            self.data = data
+            node = Node(data)
+            if data <= self.data:
+                if self.left:
+                    self.left.bst_add(data)
+                else:
+                    self.left = node
+            else:
+                if self.right:
+                    self.right.bst_add(data)
+                else:
+                    self.right = node
 
-    def print_tree(self):
+    @staticmethod
+    def dfs_in_order(node):
+        data_str = ''
+        if node:
+            data_str += Node.dfs_in_order(node.left)
+            data_str += str(node.data) + ', '
+            data_str += Node.dfs_in_order(node.right)
 
-        if self.left is not None:
-            self.left.print_tree()
+        return data_str
 
-        print(self.data)
+    @staticmethod
+    def dfs_pre_order(node):
+        data_str = ''
+        if node:
+            data_str += str(node.data) + ', '
+            data_str += Node.dfs_pre_order(node.left)
+            data_str += Node.dfs_pre_order(node.right)
+        return data_str
 
-        if self.right is not None:
-            self.right.print_tree()
-
-    def in_order_traversal(self, root):
-        visited = []
-
-        if root is not None:
-            visited += self.in_order_traversal(root.left)
-            visited.append(root.data)
-            visited += self.in_order_traversal(root.right)
-
-        return visited
-
-    def pre_order_traversal(self, root):
-        visited = []
-
-        if root is not None:
-            visited.append(root.data)
-            visited += self.pre_order_traversal(root.left)
-            visited += self.pre_order_traversal(root.right)
-
-        return visited
-
-    def post_order_traversal(self, root):
-        visited = []
-
-        if root is not None:
-            visited += self.post_order_traversal(root.left)
-            visited += self.post_order_traversal(root.right)
-            visited.append(root.data)
-
-        return visited
+    @staticmethod
+    def dfs_post_order(node):
+        data_str = ''
+        if node:
+            data_str += Node.dfs_post_order(node.left)
+            data_str += Node.dfs_post_order(node.right)
+            data_str += str(node.data) + ', '
+        return data_str
 
     def bfs(self):
-        q = queue.Queue()
-        q.put(self)
-        while not q.empty():
-            node = q.get()
-            print(node.data)
-            if node.left is not None:
-                q.put(node.left)
-            if node.right is not None:
-                q.put(node.right)
+        node_q = [self]
+        next_node_q = []
+        data_str = str(self.data) + '\n'
+        while len(node_q):
+            node = node_q.pop(0)
+            data_str += self.add_children(next_node_q, node)
+
+            if len(node_q) == 0:
+                data_str += '\n'
+                node_q = next_node_q
+                next_node_q = []
+
+        print(data_str)
+
+    def add_children(self, node_q, node):
+        data_str = ''
+        if node.left:
+            node_q.append(node.left)
+            data_str += 'l' + str(node.left.data) + ' '
+        else:
+            data_str += 'l  '
+        if node.right:
+            node_q.append(node.right)
+            data_str += 'r' + str(node.right.data) + ' '
+        else:
+            data_str += 'r  '
+        return data_str
+
+    @staticmethod
+    def sort(node):
+        return Node.dfs_in_order(node)
+
+    @staticmethod
+    def delete(root):
+        if root:
+            Node.delete(root.left)
+            Node.delete(root.right)
+            root.left = None
+            root.right = None
+            root = None
 
 
 if __name__ == '__main__':
-    root = Node(27)
+    data = [5, 6, 7, 8, 2, 3, 4, ]
 
-    # l1
-    root.add_node(14)
-    # r1
-    root.add_node(35)
+    root = Node(1)
+    for d in data:
+        root.bst_add(d)
 
-    # l1-l2
-    root.add_node(10)
-    # l1-r2
-    root.add_node(19)
-
-    # r1-l2
-    root.add_node(31)
-    # r1-r2
-    root.add_node(42)
-
-    # root.print_tree()
-    root.bfs()
-
-    # trav = root.in_order_traversal(root)
-    # print(trav)
-    # trav = root.pre_order_traversal(root)
-    # print(trav)
-    # trav = root.post_order_traversal(root)
-    # print(trav)
+    print(Node.sort(root))

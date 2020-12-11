@@ -3,65 +3,76 @@ class Node:
         self.data = data
         self.next = None
 
+    def print(self):
+        node_str = str(self.data) + ', '
+        root = self.next
+        while root:
+            node_str += str(root.data) + ', '
+            root = root.next
 
-class LinkedList:
-    def __init__(self):
-        self.head = None
+        print(node_str)
 
-    def traverse(self):
-        node = self.head
-        while True:
-            if node is None:
-                break
-            print(node.data)
+    def pre_insert(self, data):
+        node = Node(data)
+        temp_node = self.next
+        node.next = temp_node
+        self.next = node
+
+    def post_insert(self, data):
+        root = self
+        while root.next:
+            root = root.next
+
+        root.next = Node(data)
+
+    def insert_at(self, n, data):
+        if n > 0:
+            node_n_minus_1 = self.get_at(n - 1)
+            node_n_plus_1 = node_n_minus_1.next
+            node_n = Node(data)
+            node_n.next = node_n_plus_1
+            node_n_minus_1.next = node_n
+
+    def get_at(self, n):
+        node = self
+        while node.next and n > 0:
             node = node.next
+            n -= 1
 
-        print('\n')
+        return node
 
-    def pre_insert(self, node):
-        node.next = self.head
-        self.head = node
+    def pre_delete(self):
+        delete_this = self.next
+        if delete_this:
+            self.next = delete_this.next
+            del delete_this
 
-    def post_insert(self, node):
-        if self.head is None:
-            self.head = node
-        else:
-            next_node = self.head
-            while True:
-                if next_node.next is None:
-                    break
-                else:
-                    next_node = next_node.next
-        next_node.next = node
+    def post_delete(self):
+        root = self
+        if root.next:
+            while root.next.next:
+                root = root.next
 
-    def betwixt_insert(self, node, n):
-        if self.head is None:
-            self.head = node
-        else:
-            next_node = self.head
-            while True:
-                if next_node.next is None:
-                    break
-                else:
-                    next_node = next_node.next
-        next_node.next = node
+            delete_this = root.next
+            root.next = None
+            del delete_this
 
-        
+    def delete_at(self, n):
+        node_n_minus_1 = self.get_at(n-1)
+        if node_n_minus_1.next:
+            node_n_plus_1 = node_n_minus_1.next.next
+            delete_this = node_n_minus_1.next
+            node_n_minus_1.next = node_n_plus_1
+            del delete_this
+
 
 if __name__ == '__main__':
-    node1 = Node(data="Mon")
-    node2 = Node(data="Tue")
-    llist = LinkedList()
-    llist.head = node1
-    node1.next = node2
+    data = [1, 4, 6, 3, 42, 7, 9, 44, 2]
 
-    llist.traverse()
+    root = Node(0)
+    for d in data:
+        root.post_insert(d)
 
-    node3 = Node(data='Sun')
-    llist.pre_insert(node3)
-    llist.traverse()
-
-    node4 = Node(data='Wed')
-    llist.post_insert(node4)
-    llist.traverse()
-    
+    for i in range(len(data) + 1):
+        root.print()
+        root.delete_at(1)

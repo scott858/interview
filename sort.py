@@ -8,6 +8,15 @@ def bubble_sort(data):
                 data[j + 1], data[j] = data[j], data[j + 1]
 
 
+def bubble_sort_rec(data, l, r):
+    if l < r:
+        for i in range(l, r):
+            if data[i] > data[i + 1]:
+                data[i], data[i + 1] = data[i + 1], data[i]
+
+        bubble_sort_rec(data, l + 1, r)
+
+
 def partition(data, l_ix, r_ix):
     # choose the element to partition by
     pivot = data[r_ix]
@@ -39,39 +48,33 @@ def quick_sort(data, l_ix, r_ix):
 
 def merge_sort(data):
     data_len = len(data)
-    if data_len > 1:
+    if data_len <= 1:
+        res = data
+    else:
         half_ix = int(data_len / 2)
+        l = merge_sort(data[:half_ix])
+        r = merge_sort(data[half_ix:])
+        res = merge(l, r)
 
-        left = data[:half_ix]
-        right = data[half_ix:]
-
-        left = merge_sort(left)
-        right = merge_sort(right)
-
-        merged = merge(left, right)
-    else:
-        merged = data
-
-    return merged
+    return res
 
 
-def merge(left, right):
-    merged = []
-
-    while len(left) and len(right):
-        if left[0] < right[0]:
-            merged.append(left[0])
-            del left[0]
+def merge(d1, d2):
+    d = []
+    while len(d1) and len(d2):
+        if d1[0] < d2[0]:
+            d10 = d1.pop(0)
+            d.append(d10)
         else:
-            merged.append(right[0])
-            del right[0]
+            d20 = d2.pop(0)
+            d.append(d20)
 
-    if len(left):
-        merged += left
-    else:
-        merged += right
+    for elem in d1:
+        d.append(elem)
+    for elem in d2:
+        d.append(elem)
 
-    return merged
+    return d
 
 
 def selection_sort(data):
