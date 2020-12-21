@@ -17,64 +17,68 @@ def bubble_sort_rec(data, l, r):
         bubble_sort_rec(data, l + 1, r)
 
 
-def partition(data, l_ix, r_ix):
-    # choose the element to partition by
-    pivot = data[r_ix]
+def quick_sort(data):
+    data_len = len(data)
 
-    # move smaller values to left at this index
-    fill_ix = l_ix - 1
+    if data_len > 0:
+        pivot = data.pop()
+        left = []
+        right = []
+        while data:
+            d = data.pop()
+            if d < pivot:
+                left.append(d)
+            else:
+                right.append(d)
 
-    # fill the left side of the array with elements smaller than the pivot
-    for j in range(l_ix, r_ix):
-        if data[j] < pivot:
-            fill_ix += 1
-            data[fill_ix], data[j] = data[j], data[fill_ix]
-
-    # place pivot at the partition boundary
-    data[fill_ix + 1], data[r_ix] = data[r_ix], data[fill_ix + 1]
-    return fill_ix + 1
+        left = quick_sort(left)
+        right = quick_sort(right)
+        data = left + [pivot] + right
+        print(data)
+    return data
 
 
-def quick_sort(data, l_ix, r_ix):
+def quick_sort_inplace(data, l_ix, r_ix):
     if l_ix < r_ix:
-        p_ix = partition(data, l_ix, r_ix)
+        pivot = data[r_ix]
+        pivot_ix = l_ix
+        for i in range(l_ix, r_ix):
+            if data[i] < pivot:
+                data[i], data[pivot_ix] = data[pivot_ix], data[i]
+                pivot_ix += 1
 
-        # recursively sort partitions without pivot element
-        # lower partition
-        quick_sort(data, l_ix, p_ix - 1)
-        # upper partition
-        quick_sort(data, p_ix + 1, r_ix)
+        data[r_ix], data[pivot_ix] = data[pivot_ix], data[r_ix]
+        quick_sort_inplace(data, l_ix, pivot_ix - 1)
+        quick_sort_inplace(data, pivot_ix + 1, r_ix)
 
 
 def merge_sort(data):
     data_len = len(data)
-    if data_len <= 1:
-        res = data
-    else:
+
+    if data_len > 1:
         half_ix = int(data_len / 2)
-        l = merge_sort(data[:half_ix])
-        r = merge_sort(data[half_ix:])
-        res = merge(l, r)
+        left = data[:half_ix]
+        right = data[half_ix:]
+        left = merge_sort(left)
+        right = merge_sort(right)
+        data = merge(left, right)
+    return data
 
-    return res
 
-
-def merge(d1, d2):
-    d = []
-    while len(d1) and len(d2):
-        if d1[0] < d2[0]:
-            d10 = d1.pop(0)
-            d.append(d10)
+def merge(left, right):
+    data = []
+    while left and right:
+        if left[0] < right[0]:
+            data.append(left.pop(0))
         else:
-            d20 = d2.pop(0)
-            d.append(d20)
+            data.append(right.pop(0))
 
-    for elem in d1:
-        d.append(elem)
-    for elem in d2:
-        d.append(elem)
+    while left:
+        data.append(left.pop(0))
 
-    return d
+    while right:
+        data.append(right.pop(0))
+    return data
 
 
 def selection_sort(data):
@@ -92,54 +96,134 @@ def selection_sort(data):
 
 def insertion_sort(data):
     data_len = len(data)
-    for i in range(1, data_len):
-        datum = data[i]
-        prev_ix = i - 1
-        prev_datum = data[prev_ix]
-        while datum < prev_datum and prev_ix >= 0:
-            print(data)
-            data[prev_ix + 1], data[prev_ix] = data[prev_ix], data[prev_ix + 1]
-            prev_ix -= 1
-            prev_datum = data[prev_ix]
+    for i in range(data_len):
+        i_minus = i
+        i_minus_minus = i_minus - 1
+        while data[i_minus] < data[i_minus_minus] and i_minus > 0:
+            data[i_minus_minus], data[i_minus] = data[i_minus], data[i_minus_minus]
+            i_minus -= 1
+            i_minus_minus -= 1
 
 
-def heap_sort(data):
-    heapify(data)
-
-    for i in range(len(data) - 1, -1, -1):
-        data[i], data[0] = data[0], data[i]
-        heap_step(data, i, 0)
-
-
-def heap_step(data, n, root_ix):
-    left_child_ix = 2 * root_ix + 1
-    right_child_ix = 2 * root_ix + 2
-
-    if right_child_ix < n:
-        right_child = data[right_child_ix]
-
-        root = data[root_ix]
-
-        if right_child > root:
-            data[right_child_ix], data[root_ix] = data[root_ix], data[right_child_ix]
-            heap_step(data, n, right_child_ix)
-
-    if left_child_ix < n:
-        left_child = data[left_child_ix]
-
-        root = data[root_ix]
-
-        if left_child > root:
-            data[left_child_ix], data[root_ix] = data[root_ix], data[left_child_ix]
-            heap_step(data, n, left_child_ix)
+def heap_sort(data, end_ix):
+    if end_ix > 0:
+        data[0], data[end_ix] = data[end_ix], data[0]
+        heap_step(data, 0, end_ix - 1)
+        heap_sort(data, end_ix - 1)
 
 
 def heapify(data):
-    for i in range(len(data), -1, -1):
-        heap_step(data, len(data), i)
+    data_len = len(data)
+    end_ix = data_len - 1
+    last_row_ix = int(data_len / 2) - 1
+    for i in range(last_row_ix, -1, -1):
+        heap_step(data, i, end_ix)
+
+
+def heap_step(data, parent_ix, end_ix):
+    left_ix = 2 * parent_ix + 1
+    right_ix = 2 * parent_ix + 2
+
+    if right_ix <= end_ix:
+        if data[parent_ix] < data[right_ix]:
+            data[parent_ix], data[right_ix] = data[right_ix], data[parent_ix]
+            heap_step(data, right_ix, end_ix)
+    if left_ix <= end_ix:
+        if data[parent_ix] < data[left_ix]:
+            data[parent_ix], data[left_ix] = data[left_ix], data[parent_ix]
+            heap_step(data, left_ix, end_ix)
+
+
+def counting_sort_simple(data):
+    k = 70
+    n = len(data)
+
+    cumulative_count = [0] * k
+    for d in data:
+        cumulative_count[d] += 1
+
+    for i in range(1, k):
+        cumulative_count[i] += cumulative_count[i - 1]
+
+    out = [0] * n
+
+    for d in data:
+        out[cumulative_count[d] - 1] = d
+        cumulative_count[d] -= 1
+    print(out)
+    return out
+
+
+def counting_sort_radix(data, base=1, radix_pos=0):
+    k = base
+    n = len(data)
+
+    cumulative_count = [0] * k
+    for d in data:
+        i = int(d / (base ** radix_pos)) % base
+        cumulative_count[i] += 1
+
+    for i in range(1, k):
+        cumulative_count[i] += cumulative_count[i - 1]
+
+    out = [0] * n
+
+    for i in range(len(data) - 1, -1, -1):
+        ix = int(data[i] / (base ** radix_pos)) % base
+        out[cumulative_count[ix] - 1] = data[i]
+        cumulative_count[ix] -= 1
+
+    for i in range(len(data)):
+        data[i] = out[i]
+    print(data)
+
+
+def radix_sort(data, base):
+    max_data = max(data)
+    m = 0
+    while int(max_data / (base ** m)) > 0:
+        counting_sort_radix(data, base=base, radix_pos=m)
+        m += 1
+
+
+def bucket_sort(data):
+    buckets = [[] for i in range(10)]
+    for d in data:
+        i = int(d / 10)
+        buckets[i].append(d)
+
+    for bucket in buckets:
+        insertion_sort(bucket)
+    out = []
+    for bucket in buckets:
+        out += bucket
+    print(out)
+    return out
+
+
+def insertion_sort_2(data):
+    data_len = len(data)
+    for i in range(data_len):
+        j = i
+        while data[j] < data[j - 1] and j > 0:
+            data[j], data[j - 1] = data[j - 1], data[j]
+            j -= 1
+
+
+def shell_sort(data):
+    data_len = len(data)
+    gap = int(data_len / 2)
+
+    while gap > 0:
+        for i in range(gap, data_len):
+
+            j = i
+            while data[j] < data[j - gap] and j >= gap:
+                data[j], data[j - gap] = data[j - gap], data[j]
+                j -= gap
+
+        gap = int(gap / 2)
 
 
 if __name__ == '__main__':
-    data = [1, 50, 3, 12, 8, 34, 7, 29]
-    heap_sort(data)
-    print(data)
+    data = [1, 1, 1, 4, 2, 67, 9, 34, 5, 40, 39, 38, 7, 6]
