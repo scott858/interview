@@ -1,4 +1,10 @@
 def bubble_sort(data):
+    """
+    time: O(n^2), best O(n)
+    space: O(1)
+    :param data:
+    :return:
+    """
     dlen = len(data)
 
     for i in range(dlen - 1, 0, -1):
@@ -18,41 +24,59 @@ def bubble_sort_rec(data, l, r):
 
 
 def quick_sort(data):
+    """
+    time: O(n*log(n)), worst O(n^2)
+    space: O(n)
+    :param data:
+    :return:
+    """
     data_len = len(data)
 
+    left = []
+    right = []
+    pivot = []
     if data_len > 0:
-        pivot = data.pop()
-        left = []
-        right = []
+        pivot.append(data.pop())
         while data:
             d = data.pop()
-            if d < pivot:
+            if d < pivot[0]:
                 left.append(d)
             else:
                 right.append(d)
 
         left = quick_sort(left)
         right = quick_sort(right)
-        data = left + [pivot] + right
-        print(data)
-    return data
+    return left + pivot + right
 
 
 def quick_sort_inplace(data, l_ix, r_ix):
+    """
+    time: O(n*log(n)), worst O(n^2)
+    space: O(1)
+    :param data:
+    :param l_ix:
+    :param r_ix:
+    :return:
+    """
     if l_ix < r_ix:
-        pivot = data[r_ix]
         pivot_ix = l_ix
         for i in range(l_ix, r_ix):
-            if data[i] < pivot:
+            if data[i] < data[r_ix]:
                 data[i], data[pivot_ix] = data[pivot_ix], data[i]
                 pivot_ix += 1
 
-        data[r_ix], data[pivot_ix] = data[pivot_ix], data[r_ix]
-        quick_sort_inplace(data, l_ix, pivot_ix - 1)
-        quick_sort_inplace(data, pivot_ix + 1, r_ix)
+        data[pivot_ix], data[r_ix] = data[r_ix], data[pivot_ix]
+        quick_sort_inplace(data, l_ix, pivot_ix-1)
+        quick_sort_inplace(data, pivot_ix+1, r_ix)
 
 
 def merge_sort(data):
+    """
+    time: O(n*log(n)), worst O(n*log(n))
+    space: O(n)
+    :param data:
+    :return:
+    """
     data_len = len(data)
 
     if data_len > 1:
@@ -82,6 +106,12 @@ def merge(left, right):
 
 
 def selection_sort(data):
+    """
+    time: O(n^2), best O(n^2)
+    space: O(1)
+    :param data:
+    :return:
+    """
     data_len = len(data)
 
     for i in range(data_len):
@@ -95,17 +125,29 @@ def selection_sort(data):
 
 
 def insertion_sort(data):
+    """
+    time: O(n^2), best O(n)
+    space: O(1)
+    :param data:
+    :return:
+    """
     data_len = len(data)
-    for i in range(data_len):
-        i_minus = i
-        i_minus_minus = i_minus - 1
-        while data[i_minus] < data[i_minus_minus] and i_minus > 0:
-            data[i_minus_minus], data[i_minus] = data[i_minus], data[i_minus_minus]
-            i_minus -= 1
-            i_minus_minus -= 1
+
+    for i in range(1, data_len):
+        j = i
+        while data[j] < data[j - 1]:
+            data[j], data[j - 1] = data[j - 1], data[j]
+            j -= 1
 
 
 def heap_sort(data, end_ix):
+    """
+    time: O(n*log(n))
+    space: O(1)
+    :param data:
+    :param end_ix:
+    :return:
+    """
     if end_ix > 0:
         data[0], data[end_ix] = data[end_ix], data[0]
         heap_step(data, 0, end_ix - 1)
@@ -135,6 +177,12 @@ def heap_step(data, parent_ix, end_ix):
 
 
 def counting_sort_simple(data):
+    """
+    time: O(n + k)
+    space: O(n + k)
+    :param data:
+    :return:
+    """
     k = 70
     n = len(data)
 
@@ -179,6 +227,12 @@ def counting_sort_radix(data, base=1, radix_pos=0):
 
 
 def radix_sort(data, base):
+    """
+    time: O(n*k)
+    space: O(n + k)
+    :param data:
+    :return:
+    """
     max_data = max(data)
     m = 0
     while int(max_data / (base ** m)) > 0:

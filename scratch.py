@@ -40,6 +40,8 @@
 -- graph
 ---- dfs
 ---- bfs
+---- all paths
+---- shortest path
 """
 
 """
@@ -86,14 +88,13 @@ timing diagrams
 
 
 if __name__ == '__main__':
-    data = list(range(3))
     graph = {
         'A': {'B', 'C'},
         'B': {'C', 'D'},
         'C': {'D'},
-        'D': {'E'},
+        'D': {'C'},
         'E': {'F'},
         'F': {'C'},
     }
-    data = [1, 1, 1, 4, 2, 67, 9, 34, 5, 40, 39, 38, 7, 6]
-    print(data)
+    data = [1, 4, 2, 67, 1, 1, 9, 34, 5, 40, 39, 38, 7, 6]
+

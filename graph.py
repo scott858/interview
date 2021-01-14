@@ -1,4 +1,12 @@
 def graph_dfs(graph, start_vertex, visited):
+    """
+    time: O(|V| + |E|)
+    space: O(|V|)
+    :param vertex:
+    :param graph:
+    :param visited:
+    :return:
+    """
     visited.add(start_vertex)
     print(start_vertex, end=' ')
     vertices = graph[start_vertex]
@@ -8,6 +16,13 @@ def graph_dfs(graph, start_vertex, visited):
 
 
 def graph_bfs(graph, start_vertex):
+    """
+    time: O(|V| + |E|)
+    space: O(|V|)
+    :param vertex:
+    :param graph:
+    :return:
+    """
     visited = set()
     queue = [start_vertex]
 
@@ -20,21 +35,19 @@ def graph_bfs(graph, start_vertex):
                 queue.append(new_vertex)
 
 
-def find_all_paths(graph, start, end, path=None, paths=None):
-    if path is None:
-        path = [start]
-    if paths is None:
-        paths = []
-    for vertex in graph[start]:
-        if vertex not in path:
-            path.append(vertex)
-            if vertex == end:
-                paths.append(path.copy())
-            else:
-                find_all_paths(graph, vertex, end, path, paths)
-            # backtrack
+def find_all_paths(graph, this_vertex, stop_vertex, path, paths):
+    path.append(this_vertex)
+
+    if this_vertex == stop_vertex:
+        complete_path = path.copy()
+        return complete_path
+
+    for next_vertex in graph[this_vertex]:
+        if next_vertex not in path:
+            complete_path = find_all_paths(graph, next_vertex, stop_vertex, path, paths)
             path.pop()
-    return paths
+            if complete_path is not None:
+                paths.append(complete_path)
 
 
 def find_shortest_path(graph, start, end):

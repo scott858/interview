@@ -5,6 +5,11 @@ class Node:
         self.right = None
 
     def bst_add(self, data):
+        """
+        O(log(n))
+        :param data:
+        :return:
+        """
         if self.data is None:
             root.data = data
         else:
@@ -49,6 +54,10 @@ class Node:
         return data_str
 
     def bfs(self):
+        """
+        O(log(n))
+        :return:
+        """
         node_q = [self]
         next_node_q = []
         data_str = str(self.data) + '\n'
@@ -79,6 +88,11 @@ class Node:
 
     @staticmethod
     def sort(node):
+        """
+        time: O(n*log(n))
+        :param node:
+        :return:
+        """
         return Node.dfs_in_order(node)
 
     @staticmethod

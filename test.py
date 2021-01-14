@@ -34,6 +34,17 @@ def factorial_recursive(n):
     return n * factorial_recursive(n - 1)
 
 
+def permute(data, left_ix):
+    data_len = len(data)
+    if left_ix < data_len:
+        for i in range(left_ix, data_len):
+            data[left_ix], data[i] = data[i], data[left_ix]
+            permute(data, left_ix + 1)
+            data[left_ix], data[i] = data[i], data[left_ix]
+    else:
+        print(data)
+
+
 if __name__ == '__main__':
     res = factorial_recursive(5)
     print(res)
