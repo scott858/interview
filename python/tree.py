@@ -27,31 +27,24 @@ class Node:
 
     @staticmethod
     def dfs_in_order(node):
-        data_str = ''
         if node:
-            data_str += Node.dfs_in_order(node.left)
-            data_str += str(node.data) + ', '
-            data_str += Node.dfs_in_order(node.right)
-
-        return data_str
+            Node.dfs_in_order(node.left)
+            print(node.data, end=' ')
+            Node.dfs_in_order(node.right)
 
     @staticmethod
     def dfs_pre_order(node):
-        data_str = ''
         if node:
-            data_str += str(node.data) + ', '
-            data_str += Node.dfs_pre_order(node.left)
-            data_str += Node.dfs_pre_order(node.right)
-        return data_str
+            print(node.data, end=' ')
+            Node.dfs_pre_order(node.left)
+            Node.dfs_pre_order(node.right)
 
     @staticmethod
     def dfs_post_order(node):
-        data_str = ''
         if node:
-            data_str += Node.dfs_post_order(node.left)
-            data_str += Node.dfs_post_order(node.right)
-            data_str += str(node.data) + ', '
-        return data_str
+            Node.dfs_post_order(node.left)
+            Node.dfs_post_order(node.right)
+            print(node.data, end=' ')
 
     def bfs(self):
         """
@@ -108,8 +101,28 @@ class Node:
 if __name__ == '__main__':
     data = [5, 6, 7, 8, 2, 3, 4, ]
 
-    root = Node(1)
-    for d in data:
-        root.bst_add(d)
+    root = Node(0)
+    # for d in data:
+    #     root.bst_add(d)
+    #
+    # print(Node.sort(root))
+    node1 = Node(1)
+    node2 = Node(2)
+    node3 = Node(3)
+    node4 = Node(4)
+    node5 = Node(5)
+    node6 = Node(6)
 
-    print(Node.sort(root))
+    root.left = node1
+    root.right = node2
+
+    node1.left = node3
+    node1.right = node4
+
+    node2.left = node5
+
+    root.dfs_in_order(root)
+    print()
+    root.dfs_pre_order(root)
+    print()
+    root.dfs_post_order(root)

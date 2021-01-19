@@ -21,6 +21,12 @@ void pre_insert(list_node_type **head, list_node_type *new_head) {
     *head = new_head;
 }
 
+void pre_insert_dyn(list_node_type ** head, double data) {
+    list_node_type *new_head = (list_node_type*)malloc(sizeof(list_node_type));
+    new_head->data = data;
+    pre_insert(head, new_head);
+}
+
 void post_insert(list_node_type *head, list_node_type *new_tail) {
     while (head->next) {
         head = head->next;
@@ -138,6 +144,10 @@ int main(void) {
 
     print_list(head_ptr);
 
-    printf("\n%.2f", get_at(head_ptr, 3)->data);
+    printf("%.2f\n", get_at(head_ptr, 3)->data);
+
+    pre_insert_dyn(&head_ptr, 100.);
+
+    print_list(head_ptr);
 
 }
