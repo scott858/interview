@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.17)
+project(interview_questions)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_executable(binary_tree_vertical_traverse binary_tree_vertical_traverse.c)
+add_executable(binary_tree_to_doubly_linked_list binary_tree_to_doubly_linked_list.c)

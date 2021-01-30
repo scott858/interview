@@ -3,6 +3,6 @@ project(cpp_pp)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(tree c/tree.c)
-add_executable(linked_list c/linked_list.c)
-add_executable(cpp_pp main.c)
+add_subdirectory(c)
+add_subdirectory(c/interview_questions)
+add_subdirectory(cpp/cpp11)
