@@ -86,6 +86,11 @@ physics equations
 timing diagrams
 """
 
+"""
+virtual memory
+LRU cache
+"""
+
 
 if __name__ == '__main__':
     graph = {
