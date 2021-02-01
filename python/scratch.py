@@ -89,6 +89,10 @@ timing diagrams
 """
 virtual memory
 LRU cache
+mutex / semaphore
+FreeRTOS / memory allocation
+Deep Secrets interview questions
+rule of three
 """
 
 
