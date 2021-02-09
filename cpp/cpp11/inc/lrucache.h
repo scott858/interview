@@ -1,3 +1,6 @@
+#ifndef CPP_PP_LRUCACHE_H
+#define CPP_PP_LRUCACHE_H
+
 #include <iostream>
 #include <memory>
 #include <unordered_map>
@@ -10,10 +13,10 @@ template<typename X, typename T>
 class LruCache {
 private:
     struct ListNode {
-        explicit ListNode(pair<X, T> data) : data(move(data)) {};
+        explicit ListNode(pair <X, T> data) : data(move(data)) {};
 
         ~ListNode() { cout << data.first << ": destroyed\n"; };
-        pair<X, T> data;
+        pair <X, T> data;
         shared_ptr<struct ListNode> prev;
         shared_ptr<struct ListNode> next;
     };
@@ -21,7 +24,7 @@ private:
     shared_ptr<struct ListNode> head;
     shared_ptr<struct ListNode> tail;
 
-    unordered_map<X, shared_ptr<struct ListNode>> lruMap;
+    unordered_map <X, shared_ptr<struct ListNode>> lruMap;
     T capacity = 4;
 public:
     LruCache() = default;
@@ -30,7 +33,7 @@ public:
 
     T get(X ix);
 
-    void set(pair<X, T> keyValue);
+    void set(pair <X, T> keyValue);
 
     void printMap();
 
@@ -110,26 +113,4 @@ void LruCache<X, T>::set(pair<X, T> keyValue) {
         tail = newTail;
     }
 }
-
-int32_t main(int32_t argc, char **argv) {
-    vector<double> v{12., 0., 2., 100., 1., 24.};
-    auto lruCache = LruCache<int32_t, double>{};
-    for (auto i = 0; i < v.size(); ++i) {
-        lruCache.set(pair<int32_t, double>{i, v[i]});
-    }
-
-    lruCache.printMap();
-
-    for (auto key = 0; key < v.size(); ++key) {
-        auto value = lruCache.get(key);
-        cout << "key: " << key << ", value: " << value << "\n";
-    }
-    cout << "\n";
-
-    lruCache.printList();
-
-    lruCache.get(4);
-
-    lruCache.printList();
-
-}
+#endif //CPP_PP_LRUCACHE_H

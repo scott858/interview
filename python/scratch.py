@@ -93,6 +93,17 @@ mutex / semaphore
 FreeRTOS / memory allocation
 Deep Secrets interview questions
 rule of three
+abstract inheritance hierarchies
+osi network model
+template compilation
+html
+Rust
+device tree
+bootloader
+arm assembly
+ACID
+SOLID
+rpmsg
 """
 
 
